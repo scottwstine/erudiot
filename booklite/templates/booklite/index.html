@@ -1,0 +1,149 @@
+
+<html>
+
+<head>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+	{% load static %}
+	<script src="{% static 'booklite/secrets.js' %}"></script>
+	<style>
+		* {
+			box-sizing: border-box
+		}
+
+		.header {
+			background-color: #680b22;
+			color: #ffffff;
+			padding: 15px;
+			text-align: center
+		}
+
+		.book_entry {
+			display: flex;
+			flex-direction: row;
+			margin: auto;
+			width: 50%;
+		}
+		.book_results_info {
+			display: flex; flex-direction: column
+			
+		}
+	</style>
+</head>
+
+<body>
+	<div class="header">
+		<h1>BOOKLITE</h1>
+		<h4>Keep Track of the books you want to read</h4>
+
+		<div id="app">
+			<input type="text" v-model="search_text" placeholder="Book Title and/or Author">
+			
+			<button v-on:click="search">Search</button>
+			
+			<div v-for="book in books" class="book_entry">
+				<img v-bind:src="book.cover_url" width="100px" height="150px" />
+				<div class="book_results_info">
+					<span>[[book.title]]</span>
+					<span>[[book.authors]]</span>
+					<span>[[book.published]]</span>
+					<span>[[book.is_ebook]]</span>
+					<span>[[book.publisher]]</span>
+					<button v-on:click="save_book(book)">Save</button>
+				</div>
+			</div>
+		</div>
+		<script>
+			var app = new Vue({
+				el: '#app',
+				delimiters: ['[[', ']]'],
+				data: {
+					search_text: '',
+					books: []
+				},
+				methods: {
+					search: function (event) {
+						let app = this// otherwise 'this' won't be recognized in the callback (.then(function below))
+						let url_search = "https://www.googleapis.com/books/v1/volumes?"
+						axios.get(url_search, {
+							params: {
+								q: this.search_text
+							}
+						}, key = google_books_api_key)
+						.then(function (response) {
+							app.books = []   //clear out prev search
+							let items = response.data.items
+							console.log(items)
+							for (let i = 0; i < items.length; ++i) {
+								let title = items[i].volumeInfo.title
+								let authors = items[i].volumeInfo.authors.join(', ')
+								// if (items[i].volumeInfo.authors)
+									
+								let published = items[i].volumeInfo.publishedDate
+								let publisher = items[i].volumeInfo.publisher
+								let cover_url = 'https://blog.springshare.com/wp-content/uploads/2010/02/gc-md.gif'
+								if (items[i].volumeInfo.imageLinks)
+									cover_url = items[i].volumeInfo.imageLinks.thumbnail 
+								let is_ebook = items[i].saleInfo.isEbook
+								if (is_ebook)
+									is_ebook = "Ebook Edition"
+								else
+									is_ebook = ""
+								app.books.push({
+									title: title,
+									authors: authors,
+									published: published,
+									publisher: publisher,
+									cover_url: cover_url,
+									is_ebook: is_ebook
+									
+								})
+							}
+							
+						})
+					},
+					save_book: function (book) {
+						console.log(book)
+						axios.post("{% url 'booklite:save_book' %}",
+							{
+								'title': book.title,
+								'author': book.authors,							
+								'cover_url': book.cover_url 				
+							}, {
+								headers: {
+									"X-CSRFToken": "{{ csrf_token }}"
+								}
+							}
+						).then(function(response) {
+							console.log(response)
+						})
+					}
+				}
+			})
+
+			// save_book.onclick = function() {
+
+            // }
+			// setInterval(function() {
+			// 	app.message += '!'
+			// }, 500)
+			// books: [{
+				// 	url: 'https://www.bookbaby.com/images/book-cover-design-basic.png',
+				// 	title: 'How to Study Smart',
+				// 	authors: 'Douglas Peterson'
+				// }, {
+				// 	url: 'https://www.bookbaby.com/images/book-cover-design-basic.png',
+				// 	title: 'How to Study Smart',
+				// 	authors: 'Douglas Peterson'
+				// }, {
+				// 	url: 'https://www.bookbaby.com/images/book-cover-design-basic.png',
+				// 	title: 'How to Study Smart',
+				// 	authors: 'Douglas Peterson'
+				// }]
+		</script>
+</body>
+
+
+
+</html>
