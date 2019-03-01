@@ -12,6 +12,10 @@
 			box-sizing: border-box
 		}
 
+		html {
+			background-color: #680b22;	
+		}
+
 		.header {
 			background-color: #680b22;
 			color: #ffffff;
@@ -26,9 +30,9 @@
 			width: 50%;
 		}
 		.book_results_info {
-			display: flex; flex-direction: column
-			
+			display: flex; flex-direction: column			
 		}
+		
 	</style>
 </head>
 
@@ -36,6 +40,7 @@
 	<div class="header">
 		<h1>BOOKLITE</h1>
 		<h4>Keep Track of the books you want to read</h4>
+		<a href="{% url 'booklite:logout_user' %}">Logout</a>
 
 		<div id="app">
 			<input type="text" v-model="search_text" placeholder="Book Title and/or Author">
@@ -77,7 +82,9 @@
 							console.log(items)
 							for (let i = 0; i < items.length; ++i) {
 								let title = items[i].volumeInfo.title
-								let authors = items[i].volumeInfo.authors.join(', ')
+								let authors = ''
+								if (items[i].volumeInfo.authors)
+									authors = items[i].volumeInfo.authors.join(', ')
 								// if (items[i].volumeInfo.authors)
 									
 								let published = items[i].volumeInfo.publishedDate
@@ -109,7 +116,10 @@
 							{
 								'title': book.title,
 								'author': book.authors,							
-								'cover_url': book.cover_url 				
+								'cover_url': book.cover_url, 
+								'published': book.published,
+								'publisher': book.publisher
+
 							}, {
 								headers: {
 									"X-CSRFToken": "{{ csrf_token }}"
@@ -122,25 +132,8 @@
 				}
 			})
 
-			// save_book.onclick = function() {
-
-            // }
-			// setInterval(function() {
-			// 	app.message += '!'
-			// }, 500)
-			// books: [{
-				// 	url: 'https://www.bookbaby.com/images/book-cover-design-basic.png',
-				// 	title: 'How to Study Smart',
-				// 	authors: 'Douglas Peterson'
-				// }, {
-				// 	url: 'https://www.bookbaby.com/images/book-cover-design-basic.png',
-				// 	title: 'How to Study Smart',
-				// 	authors: 'Douglas Peterson'
-				// }, {
-				// 	url: 'https://www.bookbaby.com/images/book-cover-design-basic.png',
-				// 	title: 'How to Study Smart',
-				// 	authors: 'Douglas Peterson'
-				// }]
+			
+            
 		</script>
 </body>
 

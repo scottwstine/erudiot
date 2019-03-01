@@ -15,11 +15,16 @@ def save_book(request):
     print(data)
     title = data['title']
     author = data['author']
-    # published = data['published']
-    # publisher = data['publisher']
+    published = data['published']
+    publisher = data['publisher']
     img_url = data['cover_url']
-    # book = Book(title=title, author=author, ..)
-    # book.save()
+    if Book.objects.filter(title=title, author=author).exists():
+        book = Book.objects.get(title=title, author=author)
+    else:
+        book = Book(title=title, author=author, publisher=publisher, published=published, img_url=img_url)
+        book.save()
+    user = request.user
+
     # print(title)
     return HttpResponse('Book successfully saved')
 
@@ -38,14 +43,18 @@ def register_user(request):
     return HttpResponseRedirect(reverse('booklite:index'))
 
 
-# def login_user(request):
-#     username = request.POST('username')
-#     password = request.POST('password')
-#     user = authenticate(request, username=username, password=password)
-#     if user is not None:
-#         login(request, user)
+def login_user(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request, user)
+        return HttpResponseRedirect(reverse('booklite:index'))
+    return HttpResponseRedirect(reverse('booklite:registration'))
 
-# def logout_user(request):
-#     logout(request)
-#     return HttpResponseRedirect(reverse('booklite:index'))
+    
+
+def logout_user(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('booklite:index'))
 
