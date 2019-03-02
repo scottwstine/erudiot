@@ -93,6 +93,15 @@
 								if (items[i].volumeInfo.imageLinks)
 									cover_url = items[i].volumeInfo.imageLinks.thumbnail 
 								let is_ebook = items[i].saleInfo.isEbook
+								let isbn_array = items[i].volumeInfo.imageLinks.industryIdentifiers
+								let isbn = ''
+								for (let i=0; i<isbn_array.lenght; i++) {
+									if (isbn_array[i].type == "ISBN_13"){
+										isbn = isbn_array[i].identifier
+									}
+
+								}
+									
 								if (is_ebook)
 									is_ebook = "Ebook Edition"
 								else
@@ -103,7 +112,8 @@
 									published: published,
 									publisher: publisher,
 									cover_url: cover_url,
-									is_ebook: is_ebook
+									is_ebook: is_ebook,
+									isbn: isbn
 									
 								})
 							}
