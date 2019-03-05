@@ -5,12 +5,13 @@ class Book(models.Model):
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=50)
     # genre = models.CharField(max_length=50)
-    # description = models.TextField(max_length=None)
+    description = models.TextField(max_length=None)
     published = models.CharField(max_length=30)
     publisher = models.CharField(max_length=50)
-    # pagecount = models.IntegerField
+    pagecount = models.IntegerField(null=True, blank=True, default=0)
     img_url = models.CharField(max_length=200)
     users = models.ManyToManyField(User, related_name='books')
+    isbn = models.CharField(max_length=13)
 
     def __str__(self):
         return self.title

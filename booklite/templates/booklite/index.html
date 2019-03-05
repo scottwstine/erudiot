@@ -20,6 +20,10 @@
 			background-color: #680b22;
 			color: #ffffff;
 			padding: 15px;
+			text-align: center;
+		}
+		#search_div{
+			margin-bottom: 50px;
 			text-align: center
 		}
 
@@ -27,10 +31,56 @@
 			display: flex;
 			flex-direction: row;
 			margin: auto;
+			margin-bottom: 10px;
 			width: 50%;
+			color: #ffffff;
+			align-items: center;
 		}
+		.cover_img {
+			width: 150px;
+			height: auto;
+		}
+		
 		.book_results_info {
-			display: flex; flex-direction: column			
+			display: flex; flex-direction: column;
+			margin-left: 10px;	
+			align-content: center;
+			width: 100%;		
+		}
+
+		.title_span {
+			margin-bottom: 10px;
+			font-size: 25px;
+
+		}
+
+		.author_span {
+			margin-bottom: 10px;
+			font-size: 20px;
+
+		}
+
+		.published_span {
+
+		}
+
+		.ebook_span {
+
+		}
+
+		.publisher_span {
+
+		}
+
+		.book_description {
+			/* height: 6em; */
+			/* line-height: 1em; */
+			white-space: nowrap; 
+  			overflow: hidden;
+  			text-overflow: ellipsis;
+		}
+		.book_description:hover {
+			/* overflow: visible; */
 		}
 		
 	</style>
@@ -41,22 +91,26 @@
 		<h1>BOOKLITE</h1>
 		<h4>Keep Track of the books you want to read</h4>
 		<a href="{% url 'booklite:logout_user' %}">Logout</a>
+	</div>
 
 		<div id="app">
-			<input type="text" v-model="search_text" placeholder="Book Title and/or Author">
-			
+
+			<div id="search_div">
+			<input type="text" v-model="search_text" placeholder="Book Title and/or Author">			
 			<button v-on:click="search">Search</button>
-			
+			</div>
+
 			<div v-for="book in books" class="book_entry">
-				<img v-bind:src="book.cover_url" width="100px" height="150px" />
+				<img v-bind:src="book.cover_url" class="cover_img"/>
 				<div class="book_results_info">
-					<span>[[book.title]]</span>
-					<span>[[book.authors]]</span>
-					<span>[[book.published]]</span>
-					<span>[[book.is_ebook]]</span>
-					<span>[[book.publisher]]</span>
+					<span class="title_span">[[book.title]]</span>
+					<span class="author_span">[[book.authors]]</span>
+					<span class="published_span">[[book.published]]</span>
+					<span class="ebook_span">[[book.is_ebook]]</span>
+					<span class="publisher_span">[[book.publisher]]</span>
+					<div class="book_description">[[book.description]]</div>
 					<button v-on:click="save_book(book)">Save</button>
-				</div>
+				</div>				
 			</div>
 		</div>
 		<script>
@@ -86,16 +140,19 @@
 								if (items[i].volumeInfo.authors)
 									authors = items[i].volumeInfo.authors.join(', ')
 								// if (items[i].volumeInfo.authors)
-									
+								let description = items[i].volumeInfo.description	
 								let published = items[i].volumeInfo.publishedDate
 								let publisher = items[i].volumeInfo.publisher
 								let cover_url = 'https://blog.springshare.com/wp-content/uploads/2010/02/gc-md.gif'
 								if (items[i].volumeInfo.imageLinks)
 									cover_url = items[i].volumeInfo.imageLinks.thumbnail 
 								let is_ebook = items[i].saleInfo.isEbook
-								let isbn_array = items[i].volumeInfo.imageLinks.industryIdentifiers
+								let pagecount = items[i].volumeInfo.pageCount
+								let isbn_array = ''
+								if (items[i].volumeInfo.industryIdentifiers)
+									isbn_array = items[i].volumeInfo.industryIdentifiers
 								let isbn = ''
-								for (let i=0; i<isbn_array.lenght; i++) {
+								for (let i=0; i<isbn_array.length; i++) {
 									if (isbn_array[i].type == "ISBN_13"){
 										isbn = isbn_array[i].identifier
 									}
@@ -113,6 +170,8 @@
 									publisher: publisher,
 									cover_url: cover_url,
 									is_ebook: is_ebook,
+									description: description,
+									pagecount: pagecount,
 									isbn: isbn
 									
 								})
@@ -126,9 +185,12 @@
 							{
 								'title': book.title,
 								'author': book.authors,							
-								'cover_url': book.cover_url, 
+								'cover_url': book.cover_url,
+								'description': book.description, 
 								'published': book.published,
-								'publisher': book.publisher
+								'publisher': book.publisher,
+								'pagecount': book.pagecount,
+								'isbn': book.isbn
 
 							}, {
 								headers: {
