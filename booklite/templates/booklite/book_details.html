@@ -1,0 +1,28 @@
+{% extends "booklite/base_generic.html" %}
+
+{% block content %}
+
+
+<body>
+	<div class="header">
+		<h1>{{ book.title }}</h1>
+		<p>by</p>
+		<h3>{{ book.author }}</h3>
+		<h4>Details Page</h4>
+		
+	</div>
+
+	<div class="details_parent">
+		<div><img src="{{ book.img_url }}" class="cover_img" /></div>
+		<div class="description">{{ book.description }}</div>
+		<div class="details_etc">
+			<div>Edition: {{ book.published }}</div>
+			<div>by: {{ book.publisher }}</div>
+			<div>{{ book.pagecount }} pgs</div>
+			<div>ISBN #:</div>
+			<div>{{ book.isbn }}</div>
+		</div>
+	</div>
+
+</body>
+{% endblock %}

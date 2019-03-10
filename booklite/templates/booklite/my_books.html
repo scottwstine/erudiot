@@ -1,110 +1,29 @@
-<html>
+{% extends "booklite/base_generic.html" %}
 
-<head>
-	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
-</head>
-<style>
-	* {
-		box-sizing: border-box
-	}
-
-	html {
-		background-color: #680b22;
-	}
-
-	.header {
-		background-color: #680b22;
-		color: #ffffff;
-		padding: 15px;
-		text-align: center;
-	}
-
-	#search_div {
-		margin-bottom: 50px;
-		text-align: center
-	}
-
-	.book_entry {
-		display: flex;
-		flex-direction: row;
-		margin: auto;
-		margin-bottom: 10px;
-		width: 50%;
-		color: #ffffff;
-		align-items: center;
-	}
-
-	.cover_img {
-		width: 150px;
-		height: auto;
-	}
-
-	.book_results_info {
-		display: flex;
-		flex-direction: column;
-		margin-left: 10px;
-		align-content: center;
-		width: 100%;
-	}
-
-	.title_span {}
-
-	.author_span {}
-
-	.published_span {}
-
-	.ebook_span {}
-
-	.publisher_span {}
-
-	.book_description {
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-</style>
-
-<body>
-	<div class="header">
-		<h1>BOOKLITE</h1>
-		<h4>{{ request.user }}'s book list </h4>
-		<a href="{% url 'booklite:logout_user' %}">Logout</a>
+{% block content %}
+		<h4>{{ request.user }}'s book list </h4>		
 
 	</div>
+
 	{% for book in books %}
-	<div class="book_entry">
+	<div class="book_entry"> 
 
 		<img src="{{ book.img_url }}" class="cover_img" />
 		<div class="book_results_info">
-			<span class="title_span">{{ book.title }}</span>
+			<span class="title_span"><a href="{% url 'booklite:book_details' book.id %}">{{ book.title }}</a></span>
 			<span class="author_span">{{ book.authors }}</span>
 			<span class="published_span">{{ book.published }}</span>
 			<span class="ebook_span">{{ book.is_ebook }}</span>
 			<span class="publisher_span">{{ book.publisher }}</span>
 			<div class="book_description">{{ book.description }}</div>
+			<input type="hidden" name="next" value="{{next}}"/>
+			
 		</div>
-
+		<a href="{% url 'booklite:remove_book' book.id %}">
+			
+			Remove from My Books
+		</a>
 	</div>
 	{% endfor %}
 
-
-
-	<script>
-		// var app = new Vue({
-		// 		el: '#app',
-		// 		delimiters: ['[[', ']]'],
-		// 		data: {
-
-		// 			books: []
-		// 		},
-		// 		methods: {
-
-		// let my_books = {{books|safe}}
-
-
-
-	</script>
-
-</html>
+{% endblock %}

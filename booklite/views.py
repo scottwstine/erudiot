@@ -10,9 +10,12 @@ from django.contrib.auth.decorators import login_required
 def index(request):  
     return render(request, 'booklite/index.html', {})
 
+# @login_required
 def save_book(request):
+    if not request.user.is_authenticated:
+        return HttpResponse('not logged in')
     data = json.loads(request.body)
-    print(data)
+    print(data) 
     title = data['title']
     author = data['author']
     published = data['published']
@@ -33,7 +36,8 @@ def save_book(request):
     return HttpResponse('Book successfully saved')
 
 def registration(request):
-    return render(request, 'booklite/registration.html', {})
+    next = request.GET.get('next', '')
+    return render(request, 'booklite/registration.html', {'next': next})
 
 def register_user(request):     
     username = request.POST['username']    
@@ -48,12 +52,18 @@ def register_user(request):
 
 
 def login_user(request):
+    print('THIS VIEW IS BEING HIT')
     username = request.POST['username']
     password = request.POST['password']
+    next = request.POST['next']
     user = authenticate(request, username=username, password=password)
     if user is not None:
         login(request, user)
-        return HttpResponseRedirect(reverse('booklite:index'))
+        if next == '':
+            return HttpResponseRedirect(reverse('booklite:index'))
+        print('!'*100)
+        print(next)
+        return HttpResponseRedirect(next)
     return HttpResponseRedirect(reverse('booklite:registration'))
 
     
@@ -62,27 +72,22 @@ def logout_user(request):
     logout(request)
     return HttpResponseRedirect(reverse('booklite:index'))
 
-def my_books(request):
-    # books = {'books': []}
-    # for book in request.user.books.all():
-    #     books['books'].append({
-    #         'title': book.title,
-    #         'author': book.author,
-    #         'description': book.description,
-    #         'img_url': book.img_url,
-    #         'publisher': book.publisher,
-    #         'published': book.published,
-    #         'isbn': book.isbn,
-    #         'pagecount': book.pagecount
-    #     })
-    # return JsonResponse(books)
+@login_required
+def my_books(request):        
     books = request.user.books.all()
     return render(request, 'booklite/my_books.html', {'books': books})
 
 
-def view_my_books(request):
-    return HttpResponseRedirect(reverse('booklite:my_books'))
-# def view_my_books(request):
+def remove_book(request, book_id):    
+    book = request.user.books.get(id=book_id)
+    request.user.books.remove(book)
     
+    return HttpResponseRedirect(reverse('booklite:my_books'))
+    
+    
+def book_details(request, book_id):
+    book = request.user.books.get(id=book_id)
+    
+    return render(request, 'booklite/book_details.html', {'book': book})
 
-
+ 

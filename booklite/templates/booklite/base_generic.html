@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<!-- font-family: 'Julius Sans One', sans-serif; -->
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<link href='https://fonts.googleapis.com/css?family=Julius+Sans+One' rel='stylesheet' type='text/css'>
+
+	{% load static %}
+	<script src="{% static 'booklite/secrets.js' %}"></script>
+
+	<style>
+		* {
+			box-sizing: border-box;
+		}
+
+		html {
+			background-color: #680b22;
+			color: #ffffff;
+			font-family: 'Julius Sans One', sans-serif;
+		}
+
+		.header_div {
+			padding: 15px;
+			text-align: center;
+			
+		}
+
+		#search_div {
+			margin-bottom: 50px;
+			text-align: center
+		}
+
+		.book_entry {
+			display: flex;
+			flex-direction: row;
+			margin: auto;
+			margin-bottom: 10px;
+			width: 60%;
+			color: #ffffff;
+			align-items: center;
+		}
+
+		.book_entry:hover {
+			background-color: #e9bbc7;
+			color: #1a103b
+		}
+
+		.cover_img {
+			width: 150px;
+			height: auto;
+		}
+
+		.book_results_info {
+			display: flex;
+			flex-direction: column;
+			margin-left: 10px;
+			align-content: center;
+			width: 100%;
+		}
+
+		.title_span {
+			margin: 10px;
+			font-size: 25px;
+
+		}
+
+		.author_span {
+			margin: 10px;
+			font-size: 20px;
+
+		}
+
+		.published_span {
+			margin-left: 10px;
+
+		}
+
+		.ebook_span {
+			margin-left: 10px;
+
+		}
+
+		.publisher_span {
+			margin: 10px;
+
+		}
+
+		.book_description {
+			/* height: 6em; */
+			/* line-height: 1em; */
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			margin-left: 10px;
+
+		}
+
+		.book_description:hover {
+			/* overflow: visible; */
+		}
+
+		.details_parent {
+			display: flex;
+			flex-direction: row;
+			width: 90%;
+		}
+
+		.details_etc {
+			display: flex;
+			flex-direction: column;
+
+		}
+
+		.topnav_right {
+			float: right;
+			display: block;
+		}
+
+		a {
+			color: #ffffff;
+			text-decoration: none;
+			margin-bottom: 25px;
+		}
+
+		a:hover {
+			text-decoration: underline;
+
+		}
+
+		.login {
+			margin: 50px;
+		}
+
+		.register {
+			margin: 50px;
+		}
+
+		.header>h1 {
+			font-weight: bold
+		}
+	</style>
+</head>
+
+<body>
+	<div class="header_div">
+		
+
+
+		<div class="topnav_right">
+			<a href="{% url 'booklite:registration' %}">Login</a><br>
+			<a href="{% url 'booklite:logout_user' %}">Logout</a><br>
+			<a href="{% url 'booklite:my_books' %}">My Books</a>
+		</div>
+		<h1>BOOKLITE</h1>
+		<h4>Remember the books you want to read</h4>
+	</div>
+	<div>{% block content %}{% endblock %}</div>
+
+</body>
+
+</html>
