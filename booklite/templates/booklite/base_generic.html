@@ -37,6 +37,8 @@
 		.book_entry {
 			display: flex;
 			flex-direction: row;
+			justify-content: space-between;
+			min-width: 0;
 			margin: auto;
 			margin-bottom: 10px;
 			width: 60%;
@@ -45,14 +47,13 @@
 		}
 
 		.book_entry:hover {
-			background-color: #9c3a54;
+			
 			/* color: #1a103b */
 			font-style: bold;
 		}
 
 		.cover_img {
-			width: 150px;
-			height: auto;
+			width: 10%;
 		}
 
 		.book_results_info {
@@ -60,7 +61,11 @@
 			flex-direction: column;
 			margin-left: 10px;
 			align-content: center;
-			width: 100%;
+
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			width: 80%;
 		}
 
 		.title_span {
@@ -70,7 +75,7 @@
 		}
 
 		.author_span {
-			/* margin: 10px; */
+			margin: 10px;
 			font-size: 20px;
 
 		}
@@ -98,21 +103,27 @@
 			padding: 14px 28px;
 			font-size: 16px;
 			cursor: pointer;
+			/* float:right; */
+			width: 10%;
+		}
+
+		.save_book_btn:hover {
+			background-color: #9c3a54;
 		}
 
 		.book_description {
 			/* height: 6em; */
 			/* line-height: 1em; */
-			width: 80%;
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
 			margin-left: 10px;
+			/* white-space: normal; */
 
 		}
 
 		.book_description:hover {
-			/* overflow: visible; */
+			white-space: normal;
 		}
 
 		.details_parent {

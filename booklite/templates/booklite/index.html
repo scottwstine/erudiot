@@ -20,7 +20,7 @@
 
 
 	<div v-for="book in books" class="book_entry">
-		<img v-bind:src="book.cover_url" class="cover_img" />
+		<img v-bind:src="book.cover_url" class="cover_img"/>
 		<div class="book_results_info">
 			<div class="title_span">[[book.title]]</div>
 			<span class="author_span">[[book.authors]]</span>
@@ -29,7 +29,6 @@
 			<span class="publisher_span">[[book.publisher]]</span>
 			<div class="book_description">[[book.description]]</div>
 		</div>
-		<!-- <a -->
 		<button class="save_book_btn" v-on:click="save_book(book)">Save to My Books</button>
 	</div>
 
@@ -65,7 +64,9 @@
 
 							let description = items[i].volumeInfo.description
 							let published = items[i].volumeInfo.publishedDate
-							let publisher = items[i].volumeInfo.publisher
+							let publisher = ''
+							if (items[i].volumeInfo.publisher)
+								publisher = items[i].volumeInfo.publisher
 							let cover_url = 'https://blog.springshare.com/wp-content/uploads/2010/02/gc-md.gif'
 							if (items[i].volumeInfo.imageLinks)
 								cover_url = items[i].volumeInfo.imageLinks.thumbnail
@@ -123,17 +124,25 @@
 					}
 				).then(function (response) {
 					console.log(response)
-					app.viewModal = true
-					if (response.data == 'not logged in') {						
+
+					
+					if (response.data == 'not logged in') {
 						alert('You must be logged in.')
-					}
+					} else {
+						app.viewModal = true
+					}					
+					
 				})
 			},
 			close: function (close) {
 				app.viewModal = false
-				
+
 			}
-		}
+		},
+		// mounted() {
+		// 	this.search_text = 'anathem'
+		// 	this.search()
+		// }
 	})
 
 
