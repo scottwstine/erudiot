@@ -2,121 +2,141 @@
 
 {% block content %}
 
-	
-	<div id="app">
 
-		<div id="search_div">
-			<input type="text" v-model="search_text" placeholder="Book Title and/or Author" size="50"> <!--Although a bit magical, v-model is essentially syntax sugar for updating data on user input events-->
-			<button v-on:click="search">Search</button>
-		</div>
+<div id="app">
 
-		<div v-for="book in books" class="book_entry" v-on:click="save_book(book)">
-			<img v-bind:src="book.cover_url" class="cover_img" />
-			<div class="book_results_info">
-				<span class="title_span">[[book.title]]</span>
-				<span class="author_span">[[book.authors]]</span>
-				<span class="published_span">[[book.published]]</span>
-				<span class="ebook_span">[[book.is_ebook]]</span>
-				<span class="publisher_span">[[book.publisher]]</span>
-				<div class="book_description">[[book.description]]</div>
-				<!-- <button v-on:click="save_book(book)">Save</button> -->
-			</div>
+	<div id="search_div">
+		<input type="text" v-model="search_text" placeholder="Book Title and/or Author" size="50">
+		<!--Although a bit magical, v-model is essentially syntax sugar for updating data on user input events-->
+		<button v-on:click="search">Search</button>
+	</div>
+
+	<div class="saveModal" v-if="viewModal">
+		<div class="modal_content">
+			<span class="close" v-on:click="close">&times;</span>
+			<p>saved to My Books</p>
 		</div>
 	</div>
-	<script>
-		var app = new Vue({
-			el: '#app',
-			delimiters: ['[[', ']]'],
-			data: {
-				search_text: '', //see note on v-model (vue.js) above. thats how we account for user input here
-				books: []
-			},
-			methods: {
-				search: function (event) {
-					let app = this// otherwise 'this' won't be recognized in the callback (.then(function below))
-					let url_search = "https://www.googleapis.com/books/v1/volumes?"
-					axios.get(url_search, {
-						params: {
-							q: this.search_text
-						}
-					}, key = google_books_api_key)
-						.then(function (response) {
-							app.books = []   //clear out prev search. Also note, app.books instead of this.books (see 139)
-							let items = response.data.items
-							console.log(items)
-							for (let i = 0; i < items.length; ++i) {
-								let title = items[i].volumeInfo.title
-								let authors = ''
-								if (items[i].volumeInfo.authors)
-									authors = items[i].volumeInfo.authors.join(', ')
-								
-								let description = items[i].volumeInfo.description
-								let published = items[i].volumeInfo.publishedDate
-								let publisher = items[i].volumeInfo.publisher
-								let cover_url = 'https://blog.springshare.com/wp-content/uploads/2010/02/gc-md.gif'
-								if (items[i].volumeInfo.imageLinks)
-									cover_url = items[i].volumeInfo.imageLinks.thumbnail
-								let is_ebook = items[i].saleInfo.isEbook
-								let pagecount = items[i].volumeInfo.pageCount
-								let isbn_array = ''
-								if (items[i].volumeInfo.industryIdentifiers)
-									isbn_array = items[i].volumeInfo.industryIdentifiers
-								let isbn = ''
-								for (let i = 0; i < isbn_array.length; i++) {
-									if (isbn_array[i].type == "ISBN_13") {
-										isbn = isbn_array[i].identifier
-									}
 
+
+	<div v-for="book in books" class="book_entry">
+		<img v-bind:src="book.cover_url" class="cover_img" />
+		<div class="book_results_info">
+			<div class="title_span">[[book.title]]</div>
+			<span class="author_span">[[book.authors]]</span>
+			<span class="published_span">[[book.published]]</span>
+			<span class="ebook_span">[[book.is_ebook]]</span>
+			<span class="publisher_span">[[book.publisher]]</span>
+			<div class="book_description">[[book.description]]</div>
+		</div>
+		<!-- <a -->
+		<button class="save_book_btn" v-on:click="save_book(book)">Save to My Books</button>
+	</div>
+
+
+</div>
+<script>
+	var app = new Vue({
+		el: '#app',
+		delimiters: ['[[', ']]'],
+		data: {
+			search_text: '', //see note on v-model (vue.js) above. thats how we account for user input here
+			books: [],
+			viewModal: false
+		},
+		methods: {
+			search: function (event) {
+				let app = this// otherwise 'this' won't be recognized in the callback (.then(function below))
+				let url_search = "https://www.googleapis.com/books/v1/volumes?"
+				axios.get(url_search, {
+					params: {
+						q: this.search_text
+					}
+				}, key = google_books_api_key)
+					.then(function (response) {
+						app.books = []   //clear out prev search. Also note, app.books instead of this.books (see 139)
+						let items = response.data.items
+						console.log(items)
+						for (let i = 0; i < items.length; ++i) {
+							let title = items[i].volumeInfo.title
+							let authors = ''
+							if (items[i].volumeInfo.authors)
+								authors = items[i].volumeInfo.authors.join(', ')
+
+							let description = items[i].volumeInfo.description
+							let published = items[i].volumeInfo.publishedDate
+							let publisher = items[i].volumeInfo.publisher
+							let cover_url = 'https://blog.springshare.com/wp-content/uploads/2010/02/gc-md.gif'
+							if (items[i].volumeInfo.imageLinks)
+								cover_url = items[i].volumeInfo.imageLinks.thumbnail
+							let is_ebook = items[i].saleInfo.isEbook
+							let pagecount = items[i].volumeInfo.pageCount
+							let isbn_array = ''
+							if (items[i].volumeInfo.industryIdentifiers)
+								isbn_array = items[i].volumeInfo.industryIdentifiers
+							let isbn = ''
+							for (let i = 0; i < isbn_array.length; i++) {
+								if (isbn_array[i].type == "ISBN_13") {
+									isbn = isbn_array[i].identifier
 								}
 
-								if (is_ebook)
-									is_ebook = "Ebook Edition"
-								else
-									is_ebook = ""
-								app.books.push({
-									title: title,
-									authors: authors,
-									published: published,
-									publisher: publisher,
-									cover_url: cover_url,
-									is_ebook: is_ebook,
-									description: description,
-									pagecount: pagecount,
-									isbn: isbn
-
-								})
 							}
 
-						})
-				},
-				save_book: function (book) {
-					console.log(book)
-					axios.post("{% url 'booklite:save_book' %}",
-						{
-							'title': book.title,
-							'author': book.authors,
-							'cover_url': book.cover_url,
-							'description': book.description,
-							'published': book.published,
-							'publisher': book.publisher,
-							'pagecount': book.pagecount,
-							'isbn': book.isbn
+							if (is_ebook)
+								is_ebook = "Ebook Edition"
+							else
+								is_ebook = ""
+							app.books.push({
+								title: title,
+								authors: authors,
+								published: published,
+								publisher: publisher,
+								cover_url: cover_url,
+								is_ebook: is_ebook,
+								description: description,
+								pagecount: pagecount,
+								isbn: isbn
 
-						}, {
-							headers: {
-								"X-CSRFToken": "{{ csrf_token }}"
-							}
+							})
 						}
-					).then(function (response) {
-						console.log(response)
-						if (response.data = 'not logged in')
-							alert('You must be logged in.')
+
 					})
-				}
+			},
+			save_book: function (book) {
+				// console.log(book)
+				let app = this
+				axios.post("{% url 'booklite:save_book' %}",
+					{
+						'title': book.title,
+						'author': book.authors,
+						'cover_url': book.cover_url,
+						'description': book.description,
+						'published': book.published,
+						'publisher': book.publisher,
+						'pagecount': book.pagecount,
+						'isbn': book.isbn
+
+					}, {
+						headers: {
+							"X-CSRFToken": "{{ csrf_token }}"
+						}
+					}
+				).then(function (response) {
+					console.log(response)
+					app.viewModal = true
+					if (response.data == 'not logged in') {						
+						alert('You must be logged in.')
+					}
+				})
+			},
+			close: function (close) {
+				app.viewModal = false
+				
 			}
-		})
+		}
+	})
 
 
 
-	</script>
+</script>
 {% endblock %}

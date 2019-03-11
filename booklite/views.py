@@ -35,7 +35,7 @@ def save_book(request):
     # print(title)
     return HttpResponse('Book successfully saved')
 
-def registration(request):
+def registration(request): 
     next = request.GET.get('next', '')
     return render(request, 'booklite/registration.html', {'next': next})
 

@@ -26,7 +26,7 @@
 		.header_div {
 			padding: 15px;
 			text-align: center;
-			
+
 		}
 
 		#search_div {
@@ -45,8 +45,9 @@
 		}
 
 		.book_entry:hover {
-			background-color: #e9bbc7;
-			color: #1a103b
+			background-color: #9c3a54;
+			/* color: #1a103b */
+			font-style: bold;
 		}
 
 		.cover_img {
@@ -69,7 +70,7 @@
 		}
 
 		.author_span {
-			margin: 10px;
+			/* margin: 10px; */
 			font-size: 20px;
 
 		}
@@ -89,9 +90,20 @@
 
 		}
 
+		.save_book_btn {
+			border: 2px solid white;
+			border-color: white;
+			background-color: #680b22;			 
+			color: white;
+			padding: 14px 28px;
+			font-size: 16px;
+			cursor: pointer;
+		}
+
 		.book_description {
 			/* height: 6em; */
 			/* line-height: 1em; */
+			width: 80%;
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
@@ -142,18 +154,56 @@
 		.header>h1 {
 			font-weight: bold
 		}
+
+		.saveModal {
+			display: block;
+			position: fixed;
+			z-index: 0;
+			padding-top: 100px;
+			width: 100%;
+			height: 100%;
+			overflow: auto;
+			background-color: rgb(0, 0, 0, 0.4);
+
+		}
+
+		.modal_content {
+			background-color: #fefefe;
+			margin: auto;
+			padding: 20px;
+			border: 1px solid #888;
+			width: 80%;
+			color:black;
+			text-align: center;
+		}
+
+		.close {
+			color: #aaaaaa;
+			float: right;
+			font-size: 28px;
+			font-weight: bold;
+		}
+
+		.close:hover,
+		.close:focus {
+			color: #000;
+			text-decoration: none;
+			cursor: pointer;
+
+		}
 	</style>
 </head>
 
 <body>
 	<div class="header_div">
-		
+
 
 
 		<div class="topnav_right">
 			<a href="{% url 'booklite:registration' %}">Login</a><br>
 			<a href="{% url 'booklite:logout_user' %}">Logout</a><br>
-			<a href="{% url 'booklite:my_books' %}">My Books</a>
+			<a href="{% url 'booklite:my_books' %}">My Books</a><br>
+			<a href="{% url 'booklite:index' %}">Home</a>
 		</div>
 		<h1>BOOKLITE</h1>
 		<h4>Remember the books you want to read</h4>
