@@ -33,9 +33,11 @@ def save_book(request):
     book.users.add(request.user)
 
     genre_names = data['genres']
+    print(genre_names)
     for genre_name in genre_names:
         genre, created = Genre.objects.get_or_create(name=genre_name)
         book.genres.add(genre)
+        # book.save()
     
     return HttpResponse('Book successfully saved')
 
@@ -93,5 +95,6 @@ def remove_book(request, book_id):
 
 def book_details(request, book_id):
     book = request.user.books.get(id=book_id)
+    print(book.genres)
 
     return render(request, 'booklite/book_details.html', {'book': book})

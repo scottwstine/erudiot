@@ -23,3 +23,11 @@ class Book(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_genrestring(self):
+        genrestr = ''
+        for genre in self.genres.all():
+            genrestr += str(genre)
+        return genrestr
+            
+

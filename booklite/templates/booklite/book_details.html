@@ -43,6 +43,7 @@
 		<div class="description">{{ book.description }}</div>
 		<div class="details_etc">
 			<div>Edition: {{ book.published }}</div>
+			<div>Genre: {{ book.get_genrestring }}</div>
 			<div>by: {{ book.publisher }}</div>
 			<div>{{ book.pagecount }} pgs</div>
 			<div>ISBN #:</div>
