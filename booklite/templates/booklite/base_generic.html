@@ -29,11 +29,7 @@
 
 		}
 
-		#search_div {
-			margin-bottom: 50px;
-			text-align: center
-		}
-
+		/* index page/my_books */
 		.book_entry {
 			display: flex;
 			flex-direction: row;
@@ -46,16 +42,7 @@
 			align-items: center;
 		}
 
-		.book_entry:hover {
-			
-			/* color: #1a103b */
-			font-style: bold;
-		}
-
-		.cover_img {
-			width: 10%;
-		}
-
+		/* index page/my_books */
 		.book_results_info {
 			display: flex;
 			flex-direction: column;
@@ -68,15 +55,17 @@
 			width: 80%;
 		}
 
+		/* index/my_books */
 		.title_span {
-			margin: 10px;
-			font-size: 25px;
+			margin-bottom: 5px;
+			margin-left: 10px;
+			font-size: 20px;
 
 		}
 
 		.author_span {
 			margin: 10px;
-			font-size: 20px;
+			font-size: 16px;
 
 		}
 
@@ -87,54 +76,26 @@
 
 		.ebook_span {
 			margin-left: 10px;
+			font-size: 10px;
 
 		}
 
 		.publisher_span {
+			margin-left: 10px;
+			margin-bottom: 5px;
+
+		}
+
+		.genre_span {
 			margin: 10px;
-
 		}
 
-		.save_book_btn {
-			border: 2px solid white;
-			border-color: white;
-			background-color: #680b22;			 
-			color: white;
-			padding: 14px 28px;
-			font-size: 16px;
-			cursor: pointer;
-			/* float:right; */
-			width: 10%;
-		}
-
-		.save_book_btn:hover {
-			background-color: #9c3a54;
-		}
-
+		/* index/my_books */
 		.book_description {
-			/* height: 6em; */
-			/* line-height: 1em; */
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
 			margin-left: 10px;
-			/* white-space: normal; */
-
-		}
-
-		.book_description:hover {
-			white-space: normal;
-		}
-
-		.details_parent {
-			display: flex;
-			flex-direction: row;
-			width: 90%;
-		}
-
-		.details_etc {
-			display: flex;
-			flex-direction: column;
 
 		}
 
@@ -154,61 +115,14 @@
 
 		}
 
-		.login {
-			margin: 50px;
-		}
-
-		.register {
-			margin: 50px;
-		}
-
 		.header>h1 {
 			font-weight: bold
-		}
-
-		.saveModal {
-			display: block;
-			position: fixed;
-			z-index: 0;
-			padding-top: 100px;
-			width: 100%;
-			height: 100%;
-			overflow: auto;
-			background-color: rgb(0, 0, 0, 0.4);
-
-		}
-
-		.modal_content {
-			background-color: #fefefe;
-			margin: auto;
-			padding: 20px;
-			border: 1px solid #888;
-			width: 80%;
-			color:black;
-			text-align: center;
-		}
-
-		.close {
-			color: #aaaaaa;
-			float: right;
-			font-size: 28px;
-			font-weight: bold;
-		}
-
-		.close:hover,
-		.close:focus {
-			color: #000;
-			text-decoration: none;
-			cursor: pointer;
-
 		}
 	</style>
 </head>
 
 <body>
 	<div class="header_div">
-
-
 
 		<div class="topnav_right">
 			<a href="{% url 'booklite:registration' %}">Login</a><br>

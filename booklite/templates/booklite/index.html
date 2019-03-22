@@ -1,12 +1,86 @@
 {% extends "booklite/base_generic.html" %}
 
 {% block content %}
+<html>
 
+<head>
+	<style>
+		#search_div {
+			margin-bottom: 50px;
+			text-align: center
+		}
+
+		.book_entry:hover {
+			font-style: bold;
+		}
+
+		.cover_img {
+			width: 10%;
+		}
+
+		.save_book_btn {
+			border: 2px solid white;
+			border-color: white;
+			background-color: #680b22;			 
+			color: white;
+			padding: 14px 28px;
+			font-size: 16px;
+			cursor: pointer;			
+			width: 10%;
+		}
+
+		.save_book_btn:hover {
+			background-color: #9c3a54;
+		}
+
+		.book_description:hover {
+			white-space: normal;
+		}
+
+		.saveModal {
+			display: block;
+			position: fixed;
+			z-index: 0;
+			padding-top: 100px;
+			width: 100%;
+			height: 100%;
+			overflow: auto;
+			background-color: rgb(0, 0, 0, 0.4);
+
+		}
+
+		.modal_content {
+			background-color: #fefefe;
+			margin: auto;
+			padding: 20px;
+			border: 1px solid #888;
+			width: 80%;
+			color:black;
+			text-align: center;
+		}
+
+		.close {
+			color: #aaaaaa;
+			float: right;
+			font-size: 28px;
+			font-weight: bold;
+		}
+
+		.close:hover,
+		.close:focus {
+			color: #000;
+			text-decoration: none;
+			cursor: pointer;
+
+		}
+	</style>
+</head>
 
 <div id="app">
 
 	<div id="search_div">
-		<input type="text" v-model="search_text" placeholder="Book Title and/or Author" size="50">
+		<input type="text" v-model="search_text" v-on:keydown.enter="search" placeholder="Book Title and/or Author"
+			size="50">
 		<!--Although a bit magical, v-model is essentially syntax sugar for updating data on user input events-->
 		<button v-on:click="search">Search</button>
 	</div>
@@ -20,13 +94,14 @@
 
 
 	<div v-for="book in books" class="book_entry">
-		<img v-bind:src="book.cover_url" class="cover_img"/>
+		<img v-bind:src="book.cover_url" class="cover_img" />
 		<div class="book_results_info">
 			<div class="title_span">[[book.title]]</div>
 			<span class="author_span">[[book.authors]]</span>
 			<span class="published_span">[[book.published]]</span>
 			<span class="ebook_span">[[book.is_ebook]]</span>
 			<span class="publisher_span">[[book.publisher]]</span>
+			<span class="genre_span">[[book.genres.join(', ')]]</span>
 			<div class="book_description">[[book.description]]</div>
 		</div>
 		<button class="save_book_btn" v-on:click="save_book(book)">Save to My Books</button>
@@ -82,6 +157,9 @@
 								}
 
 							}
+							let genres = []
+							if (items[i].volumeInfo.categories)
+								genres = items[i].volumeInfo.categories
 
 							if (is_ebook)
 								is_ebook = "Ebook Edition"
@@ -96,7 +174,8 @@
 								is_ebook: is_ebook,
 								description: description,
 								pagecount: pagecount,
-								isbn: isbn
+								isbn: isbn,
+								genres: genres
 
 							})
 						}
@@ -115,7 +194,8 @@
 						'published': book.published,
 						'publisher': book.publisher,
 						'pagecount': book.pagecount,
-						'isbn': book.isbn
+						'isbn': book.isbn,
+						'genres': book.genres
 
 					}, {
 						headers: {
@@ -125,13 +205,13 @@
 				).then(function (response) {
 					console.log(response)
 
-					
+
 					if (response.data == 'not logged in') {
 						alert('You must be logged in.')
 					} else {
 						app.viewModal = true
-					}					
-					
+					}
+
 				})
 			},
 			close: function (close) {
@@ -148,4 +228,6 @@
 
 
 </script>
+
+</html>
 {% endblock %}
