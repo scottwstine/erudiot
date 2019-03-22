@@ -25,7 +25,9 @@ SECRET_KEY = 'onwn-w_0l#)9o3dy0r*g^5g&6^d5fr*4g)w*3s$h4l)t#j%x7s'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'booklite.pdxstudents.com'
+]
 
 
 # Application definition
@@ -122,5 +124,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 
 LOGIN_URL = '/registration/'
