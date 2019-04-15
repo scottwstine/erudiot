@@ -36,8 +36,7 @@ def save_book(request):
     print(genre_names)
     for genre_name in genre_names:
         genre, created = Genre.objects.get_or_create(name=genre_name)
-        book.genres.add(genre)
-        # book.save()
+        book.genres.add(genre)        
     
     return HttpResponse('Book successfully saved')
 
@@ -59,8 +58,7 @@ def register_user(request):
     return HttpResponseRedirect(reverse('booklite:index'))
 
 
-def login_user(request):
-    print('THIS VIEW IS BEING HIT')
+def login_user(request):    
     username = request.POST['username']
     password = request.POST['password']
     next = request.POST['next']
@@ -68,9 +66,7 @@ def login_user(request):
     if user is not None:
         login(request, user)
         if next == '':
-            return HttpResponseRedirect(reverse('booklite:index'))
-        print('!'*100)
-        print(next)
+            return HttpResponseRedirect(reverse('booklite:index'))        
         return HttpResponseRedirect(next)
     return HttpResponseRedirect(reverse('booklite:registration'))
 
