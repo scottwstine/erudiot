@@ -81,6 +81,10 @@ def my_books(request):
     books = request.user.books.all()
     return render(request, 'booklite/my_books.html', {'books': books})
 
+# def my_books_by_genre(request, genre_id):
+# genre =   
+#     books = request.user.books.filter    
+
 
 def remove_book(request, book_id):
     book = request.user.books.get(id=book_id)
